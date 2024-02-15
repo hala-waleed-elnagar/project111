@@ -1,0 +1,58 @@
+#include <avr/io.h>
+#include <util/delay.h>
+#include "DIO.h"
+#include "ADC.h"
+#include "UART.h"
+
+int main(){
+  init();
+  int rate;//knowing variable for the rate of adc readchannel
+  unsigned char buffer[4];//have 4 values
+  while(2)
+  {
+ 
+    LED();// led function 
+    rate = Adc_ReadChannel(1);//  adc register
+   itoa(rate,buffer,9);//function to make number into string
+   Uart_SendString(buffer);//calling it from uart 
+   Uart_SendString("\n");//function start a new line
+
+  }
+}
+
+void init(){
+
+    LED();
+    Uart_Init();
+}
+
+
+void LED(void){ // to light up the LED
+float volt;
+  Dio_SetPinDirection('B',13,0);//pin 13 output
+ 
+  Dio_SetPinDirection('B',8,0);// pin 8 inputs
+
+  Adc_Init();//intializing adc 
+
+  volt = Adc_ReadChannel(2);// to read the volt values from adc channel
+ 
+  if(volt>500){// the LED liht up when button is pressed 
+    
+
+    
+    Dio_SetPortDirection('D',8,0);//Port D Pin 8 activated when button pressed 
+   
+   
+  
+    
+
+  }
+    else
+    Dio_SetPortDirection('B',13,0);//Port B Pin 13 not ativated when button switched 
+
+    
+ 
+}
+
+  
